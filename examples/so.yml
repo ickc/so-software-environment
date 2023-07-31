@@ -51,7 +51,7 @@ dependencies:
   - pysqlite3
   - pytest
   - pytest-cov
-  - python=3.11
+  - python=3.10
   - python-dateutil
   - pytz
   - pyyaml
