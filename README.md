@@ -8,7 +8,7 @@ This is the recommended method if you are developing on your machine. For `simon
 
 1. install conda/mamba first
 
-2. install SO environment:
+2. install SO environment: before you begin, you may want to edit `examples/so.yml` manually if you want to choose a different version of `toast` or `sotodlib` for example.
 
     - create new environment:
 
@@ -44,27 +44,16 @@ This is the recommended method if you are developing on your machine. For `simon
 
         - using mamba: `mamba env update --name so-310 --file examples/so.yml --prune`
 
-3. install sotodlib:
+3. (optional) install & development: here we use `sotodlib` as an example:
 
-    - install only:
+    ```sh
+    # go to some directory that you want to put the git repo first
+    git clone git@github.com:simonsobs/sotodlib.git
+    # change branch or tag if you need
+    # pip install -e .
+    ```
 
-        ```sh
-        # branch such as master
-        pip install https://github.com/simonsobs/sotodlib/archive/master.tar.gz
-        # version
-        pip install https://github.com/simonsobs/sotodlib/archive/v0.4.0.tar.gz
-        ```
-
-    - install and development:
-
-        ```sh
-        # go to some directory that you want to put the git repo first
-        git clone git@github.com:simonsobs/sotodlib.git
-        # change branch or tag if you need
-        # pip install -e .
-        ```
-
-4. running TOAST test:
+4. running TOAST test to ensure your installation works:
 
     ```sh
     python -c 'import toast.tests; toast.tests.run()'

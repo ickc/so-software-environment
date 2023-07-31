@@ -1,7 +1,7 @@
 name: so-310
 channels:
   - conda-forge
-channel_priority: True
+  - nodefaults
 dependencies:
   - astropy
   - autobahn
@@ -78,5 +78,8 @@ dependencies:
       - posix_ipc
       - so3g
       - socs
-      # requires manual update as toast3 is currently pre-released
+      # TODO: change this version manually as toast3 is currently pre-released
+      #* see https://pypi.org/project/toast/#history to find newer versions
       - toast==3.0.0a18
+      # TODO: choose your own version here, can be a branch like master, or a version like v0.4.0
+      - https://github.com/simonsobs/sotodlib/archive/master.tar.gz
