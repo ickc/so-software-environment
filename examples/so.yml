@@ -78,3 +78,5 @@ dependencies:
       - posix_ipc
       - so3g
       - socs
+      # requires manual update as toast3 is currently pre-released
+      - toast==3.0.0a18
