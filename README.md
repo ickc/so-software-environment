@@ -50,9 +50,9 @@ This is the recommended method if you are developing on your machine. For `simon
 
         ```sh
         # branch such as master
-        pip install git+https://github.com/simonsobs/sotodlib.git@master
+        pip install https://github.com/simonsobs/sotodlib/archive/master.zip
         # version
-        pip install git+https://github.com/simonsobs/sotodlib.git@v0.4.0
+        pip install https://github.com/simonsobs/sotodlib/archive/v0.4.0.zip
         ```
 
     - install and development:
