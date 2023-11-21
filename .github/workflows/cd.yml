@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Create and push tag
+        run: |
+          # Set tag name, e.g., YYYYMMDD format
+          TAG_NAME=$(date +'%Y%m%d')
+          
+          # Optionally, check if the tag already exists
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+              echo "Tag $TAG_NAME already exists"
+              exit 1
+          fi
+
+          # Create the tag
+          git tag $TAG_NAME
+
+          # Push the tag to the repository
+          git push origin $TAG_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
