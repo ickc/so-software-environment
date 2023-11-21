@@ -52,8 +52,8 @@ dependencies:
   - pysqlite3
   - pytest
   - pytest-cov
-  - python=3.10
   - python-dateutil
+  - python=3.10
   - pytz
   - pyyaml
   - quaternionarray
@@ -74,6 +74,8 @@ dependencies:
   - wurlitzer
   - pip:
       - cbor2
+      # TODO: choose your own version here, can be a branch like master, or a version like v0.4.0
+      - https://github.com/simonsobs/sotodlib/archive/master.tar.gz
       - ocs
       - pixell
       - posix_ipc
@@ -82,5 +84,3 @@ dependencies:
       # TODO: change this version manually as toast3 is currently pre-released
       #* see https://pypi.org/project/toast/#history to find newer versions
       - toast==3.0.0a20
-      # TODO: choose your own version here, can be a branch like master, or a version like v0.4.0
-      - https://github.com/simonsobs/sotodlib/archive/master.tar.gz
