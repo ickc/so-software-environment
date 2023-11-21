@@ -27,6 +27,6 @@ jobs:
         auto-activate-base: true
         activate-environment: ""
     - name: conda create
-      run: mamba env create --prefix ${{ matrix.prefix }}/conda-${TODAYS_DATE} --file examples/so.yml
+      run: mamba env create --prefix ${{ matrix.prefix }}/so-conda-${TODAYS_DATE} --file examples/so.yml
     - name: debug
       run: ls -R ${{ matrix.prefix }}
