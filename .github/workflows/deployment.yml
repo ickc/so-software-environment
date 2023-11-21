@@ -26,6 +26,10 @@ jobs:
         channels: conda-forge
         auto-activate-base: true
         activate-environment: ""
+    - name: mkdir and chown
+      run: |
+        sudo mkdir -p ${{ matrix.prefix }}
+        sudo chown -R $USER ${{ matrix.prefix }}
     - name: conda create
       run: mamba env create --prefix ${{ matrix.prefix }}/so-conda-${TODAYS_DATE} --file examples/so.yml
     - name: debug
