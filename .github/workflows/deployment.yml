@@ -1,10 +1,9 @@
 name: Continuous Deployment
 on:
+  # https://stackoverflow.com/a/61892639/5769446
   push:
-    branches:
-      - main
-  schedule:
-    - cron: '0 0 * * *'
+    tags:
+      - '**'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,8 +16,6 @@ jobs:
         prefix:
           - /cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda/
     steps:
-    - name: Set date
-      run: echo "TODAYS_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
     - uses: actions/checkout@v4
     - uses: conda-incubator/setup-miniconda@v2
       with:
@@ -31,9 +28,14 @@ jobs:
         sudo mkdir -p ${{ matrix.prefix }}
         sudo chown -R $USER ${{ matrix.prefix }}
     - name: conda create
-      run: mamba env create --prefix ${{ matrix.prefix }}/so-conda-${TODAYS_DATE} --file examples/so.yml
+      run: mamba env create --prefix ${{ matrix.prefix }}/so-conda-${GITHUB_REF_NAME} --file examples/so.yml
     - name: debug
       run: ls -R ${{ matrix.prefix }}
+    - name: create tarball
+      run: |
+        cd ${{ matrix.prefix }}
+        tar -cf so-conda-${GITHUB_REF_NAME}.tar so-conda-${GITHUB_REF_NAME}
+        gzip so-conda-${GITHUB_REF_NAME}.tar
     - uses: actions/upload-artifact@v3
       with:
-        path: ${{ matrix.prefix }}
+        path: ${{ matrix.prefix }}/so-conda-${{ env.GITHUB_REF_NAME }}.tar.gz
