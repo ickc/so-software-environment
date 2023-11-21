@@ -34,8 +34,10 @@ jobs:
     - name: create tarball
       run: |
         cd ${{ matrix.prefix }}
-        tar -cf so-conda-${GITHUB_REF_NAME}.tar so-conda-${GITHUB_REF_NAME}
-        gzip so-conda-${GITHUB_REF_NAME}.tar
+        tar -cf so-conda.tar so-conda-${GITHUB_REF_NAME}
+        gzip so-conda.tar
+    - name: debug
+      run: ls ${{ matrix.prefix }}
     - uses: actions/upload-artifact@v3
       with:
-        path: ${{ matrix.prefix }}/so-conda-${{ env.GITHUB_REF_NAME }}.tar.gz
+        path: ${{ matrix.prefix }}/so-conda.tar.gz
