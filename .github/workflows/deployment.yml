@@ -41,3 +41,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         path: ${{ matrix.prefix }}/so-conda.tar.gz
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ matrix.prefix }}/so-conda.tar.gz
