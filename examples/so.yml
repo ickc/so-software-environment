@@ -33,6 +33,7 @@ dependencies:
   - mpich-mpicxx
   - mpich-mpifort
   - mypy
+  - namaster
   - nbformat
   - numba
   - numpy
