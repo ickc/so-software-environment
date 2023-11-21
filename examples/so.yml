@@ -81,6 +81,6 @@ dependencies:
       - socs
       # TODO: change this version manually as toast3 is currently pre-released
       #* see https://pypi.org/project/toast/#history to find newer versions
-      - toast==3.0.0a18
+      - toast==3.0.0a20
       # TODO: choose your own version here, can be a branch like master, or a version like v0.4.0
       - https://github.com/simonsobs/sotodlib/archive/master.tar.gz
