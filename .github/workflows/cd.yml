@@ -1,28 +1,20 @@
+name: Daily Tag
+
 on:
-  push:
-    branches:
-      - main
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *' # Runs at 00:00 UTC every day
 
 jobs:
-  tag:
-    name: Tag
+  create-tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout branch "main"
-        uses: actions/checkout@v2
-        with:
-          ref: 'main'
-      - name: Create tag
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const date = new Date().toISOString().split('T')[0].replace(/-/g, '');
-            const tagName = `refs/tags/${date}`;
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: tagName,
-              sha: context.sha
-            })
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create and Push Tag
+      run: |
+        DATE=$(date +\%Y\%m\%d)
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag $DATE
+        git push origin $DATE
