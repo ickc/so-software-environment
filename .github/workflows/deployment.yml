@@ -30,3 +30,6 @@ jobs:
       run: mamba env create --prefix ${{ matrix.prefix }}/so-conda-${TODAYS_DATE} --file examples/so.yml
     - name: debug
       run: ls -R ${{ matrix.prefix }}
+    - uses: actions/upload-artifact@v3
+      with:
+        path: ${{ matrix.prefix }}
