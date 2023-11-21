@@ -15,7 +15,7 @@ jobs:
         with:
           ref: 'main'
       - name: Create tag
-        uses: actions/github-script@v5
+        uses: actions/github-script@v7
         with:
           script: |
             const date = new Date().toISOString().split('T')[0].replace(/-/g, '');
