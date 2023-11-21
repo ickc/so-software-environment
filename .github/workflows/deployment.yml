@@ -18,7 +18,7 @@ jobs:
           - /cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda/
     steps:
     - name: Set date
-      run: echo "TODAYS_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      run: echo "TODAYS_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
     - uses: actions/checkout@v4
     - uses: conda-incubator/setup-miniconda@v2
       with:
