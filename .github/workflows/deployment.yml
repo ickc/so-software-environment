@@ -20,12 +20,7 @@ jobs:
     - name: Set date
       run: echo "TODAYS_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
     - uses: actions/checkout@v4
-    - uses: conda-incubator/setup-miniconda@v2
-      with:
-        mamba-version: "*"
-        channels: conda-forge
-        auto-activate-base: true
-        activate-environment: ""
+    - uses: mamba-org/setup-micromamba@v1
     - name: mkdir and chown
       run: |
         sudo mkdir -p ${{ matrix.prefix }}
