@@ -15,7 +15,8 @@ jobs:
     strategy:
       matrix:
         prefix:
-          - /cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda/
+          - /cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda
+          - /tmp
     steps:
     - name: Set date
       run: echo "TODAYS_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
