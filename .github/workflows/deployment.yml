@@ -30,6 +30,8 @@ jobs:
         channels: conda-forge
         activate-environment: ${{ matrix.prefix }}/so-conda-${{ env.TODAYS_DATE }}
         environment-file: examples/so.yml
+    - name: cleanup
+      run: mamba clean --all
     - name: debug
       run: ls -R ${{ matrix.prefix }}
     - name: create tarball
