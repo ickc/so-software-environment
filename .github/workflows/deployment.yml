@@ -22,7 +22,7 @@ jobs:
       run: |
         TODAYS_DATE="$(date +'%Y%m%d')"
         echo "TODAYS_DATE=$TODAYS_DATE" >> $GITHUB_ENV
-        OUTFILE_PREFIX="${${{ matrix.prefix }}//\//_}"
+        OUTFILE_PREFIX="$(echo ${{ matrix.prefix }} | sed 's/\//_/g'))"
         echo "OUTFILE_PREFIX=$OUTFILE_PREFIX" >> $GITHUB_ENV
     - uses: actions/checkout@v4
     - name: mkdir and chown
