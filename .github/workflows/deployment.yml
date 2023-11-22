@@ -27,7 +27,7 @@ jobs:
       run: |
         YYYYMMDD="$(date +'%Y%m%d')"
         echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
-        FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')"
+        FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')_${{ env.ENV_PREFIX }}-$YYYYMMDD"
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
     - uses: actions/checkout@v4
     - name: mkdir and chown
@@ -44,8 +44,9 @@ jobs:
       run: ls -R /${{ matrix.BASE_PREFIX }}
     - name: create tarball
       run: |
-        cd /${{ matrix.BASE_PREFIX }}
-        tar -cf ${{ env.FILENAME }}.tar ${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
+        cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
+        tar -cf ../${{ env.FILENAME }}.tar .
+        cd ..
         gzip ${{ env.FILENAME }}.tar
     - name: debug
       run: ls /${{ matrix.BASE_PREFIX }}

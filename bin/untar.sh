@@ -6,9 +6,9 @@ YYYYMMDD="${YYYYMMDD:-$(date +'%Y%m%d')}"
 
 FILENAME="$(echo "$BASE_PREFIX" | sed 's/\//_/g')"
 URL="https://github.com/ickc/so-software-environment/releases/download/$YYYYMMDD/$FILENAME.tar.gz"
+PREFIX="/$BASE_PREFIX/$ENV_PREFIX-$YYYYMMDD"
 
 cd /tmp || exit 1
 wget "$URL"
-tar -xzf "$FILENAME.tar.gz" -C "/$BASE_PREFIX"
-PREFIX="/$BASE_PREFIX/$ENV_PREFIX-$YYYYMMDD"
+tar -xzf "$FILENAME.tar.gz" -C "$PREFIX"
 echo "Usage: . $PREFIX/bin/activate $PREFIX"
