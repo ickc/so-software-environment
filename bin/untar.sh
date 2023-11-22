@@ -2,7 +2,7 @@
 
 ENV_PREFIX="${ENV_PREFIX:-so-conda}"
 BASE_PREFIX="${BASE_PREFIX:-tmp}"
-YYYYMMDD="${BASE_PREFIX:-$(date +'%Y%m%d')}"
+YYYYMMDD="${YYYYMMDD:-$(date +'%Y%m%d')}"
 
 FILENAME="$(echo "$BASE_PREFIX" | sed 's/\//_/g'))"
 URL="https://github.com/ickc/so-software-environment/releases/download/$YYYYMMDD/$ENV_PREFIX.tar.gz"
