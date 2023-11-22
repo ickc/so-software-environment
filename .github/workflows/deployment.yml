@@ -7,8 +7,8 @@ on:
     - cron: '0 0 * * *' # Runs at 00:00 UTC every day
 env:
   # this is the prefix for the conda environment, e.g. so-conda-YYYYMMDD
-  - ENV_PREFIX: so-conda
-  - ENV_FILE: examples/so.yml
+  ENV_PREFIX: so-conda
+  ENV_FILE: examples/so.yml
 jobs:
   build:
     runs-on: ubuntu-latest
