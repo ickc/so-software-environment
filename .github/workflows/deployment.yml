@@ -18,8 +18,12 @@ jobs:
           - /cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda
           - /tmp
     steps:
-    - name: Set date
-      run: echo "TODAYS_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+    - name: Set date and output filename
+      run: |
+        TODAYS_DATE="$(date +'%Y%m%d')"
+        echo "TODAYS_DATE=$TODAYS_DATE" >> $GITHUB_ENV
+        OUTFILE_PREFIX="${${{ matrix.prefix }}//\//_}"
+        echo "OUTFILE_PREFIX=$OUTFILE_PREFIX" >> $GITHUB_ENV
     - uses: actions/checkout@v4
     - name: mkdir and chown
       run: |
@@ -38,13 +42,13 @@ jobs:
     - name: create tarball
       run: |
         cd ${{ matrix.prefix }}
-        tar -cf so-conda.tar so-conda-${{ env.TODAYS_DATE }}
-        gzip so-conda.tar
+        tar -cf ${{ env.OUTFILE_PREFIX }}.tar so-conda-${{ env.TODAYS_DATE }}
+        gzip {{ env.OUTFILE_PREFIX }}.tar
     - name: debug
       run: ls ${{ matrix.prefix }}
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: ${{ matrix.prefix }}/so-conda.tar.gz
+        files: ${{ matrix.prefix }}/{{ env.OUTFILE_PREFIX }}.tar.gz
         tag_name: ${{ env.TODAYS_DATE }}
         name: ${{ env.TODAYS_DATE }}
