@@ -43,7 +43,7 @@ jobs:
       run: |
         cd ${{ matrix.prefix }}
         tar -cf ${{ env.OUTFILE_PREFIX }}.tar so-conda-${{ env.TODAYS_DATE }}
-        gzip {{ env.OUTFILE_PREFIX }}.tar
+        gzip ${{ env.OUTFILE_PREFIX }}.tar
     - name: debug
       run: ls ${{ matrix.prefix }}
     - name: Release
