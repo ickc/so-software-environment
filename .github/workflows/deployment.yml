@@ -5,6 +5,10 @@ on:
       - main
   schedule:
     - cron: '0 0 * * *' # Runs at 00:00 UTC every day
+env:
+  # this is the prefix for the conda environment, e.g. so-conda-YYYYMMDD
+  - ENV_PREFIX: so-conda
+  - ENV_FILE: examples/so.yml
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,41 +18,42 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix:
-        prefix:
-          - /cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda
-          - /tmp
+        # this is the base prefix of the conda environment, the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-$YYYYMMDD
+        BASE_PREFIX:
+          - cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda
+          - tmp
     steps:
     - name: Set date and output filename
       run: |
-        TODAYS_DATE="$(date +'%Y%m%d')"
-        echo "TODAYS_DATE=$TODAYS_DATE" >> $GITHUB_ENV
-        OUTFILE_PREFIX="$(echo ${{ matrix.prefix }} | sed 's/\//_/g'))"
-        echo "OUTFILE_PREFIX=$OUTFILE_PREFIX" >> $GITHUB_ENV
+        YYYYMMDD="$(date +'%Y%m%d')"
+        echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
+        FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g'))"
+        echo "FILENAME=$FILENAME" >> $GITHUB_ENV
     - uses: actions/checkout@v4
     - name: mkdir and chown
       run: |
-        sudo mkdir -p ${{ matrix.prefix }}
-        sudo chown -R $USER ${{ matrix.prefix }}
+        sudo mkdir -p /${{ matrix.BASE_PREFIX }}
+        sudo chown -R $USER /${{ matrix.BASE_PREFIX }}
     - uses: conda-incubator/setup-miniconda@v2
       with:
         mamba-version: "*"
         channels: conda-forge
-        activate-environment: ${{ matrix.prefix }}/so-conda-${{ env.TODAYS_DATE }}
-        environment-file: examples/so.yml
+        activate-environment: /${{ matrix.BASE_PREFIX }}/${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
+        environment-file: ${{ env.ENV_FILE }}
     - name: cleanup
       run: mamba clean --all
     - name: debug
-      run: ls -R ${{ matrix.prefix }}
+      run: ls -R /${{ matrix.BASE_PREFIX }}
     - name: create tarball
       run: |
-        cd ${{ matrix.prefix }}
-        tar -cf ${{ env.OUTFILE_PREFIX }}.tar so-conda-${{ env.TODAYS_DATE }}
-        gzip ${{ env.OUTFILE_PREFIX }}.tar
+        cd /${{ matrix.BASE_PREFIX }}
+        tar -cf ${{ env.FILENAME }}.tar ${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
+        gzip ${{ env.FILENAME }}.tar
     - name: debug
-      run: ls ${{ matrix.prefix }}
+      run: ls /${{ matrix.BASE_PREFIX }}
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: ${{ matrix.prefix }}/{{ env.OUTFILE_PREFIX }}.tar.gz
-        tag_name: ${{ env.TODAYS_DATE }}
-        name: ${{ env.TODAYS_DATE }}
+        files: /${{ matrix.BASE_PREFIX }}/{{ env.FILENAME }}.tar.gz
+        tag_name: ${{ env.YYYYMMDD }}
+        name: ${{ env.YYYYMMDD }}
