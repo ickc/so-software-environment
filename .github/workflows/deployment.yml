@@ -24,10 +24,11 @@ jobs:
       run: |
         sudo mkdir -p ${{ matrix.prefix }}
         sudo chown -R $USER ${{ matrix.prefix }}
-    - uses: mamba-org/setup-micromamba@v1
+    - uses: conda-incubator/setup-miniconda@v2
       with:
-        environment-name: so-conda-${{ env.TODAYS_DATE }}
-        micromamba-root-path: ${{ matrix.prefix }}
+        mamba-version: "*"
+        channels: conda-forge
+        activate-environment: ${{ matrix.prefix }}/so-conda-${{ env.TODAYS_DATE }}
         environment-file: examples/so.yml
     - name: install mamba
       run: |
