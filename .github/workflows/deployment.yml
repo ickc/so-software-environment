@@ -15,18 +15,21 @@ jobs:
     strategy:
       matrix:
         prefix:
-          - /cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda
+          - /cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda/
     steps:
     - name: Set date
       run: echo "TODAYS_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
     - uses: actions/checkout@v4
     - uses: mamba-org/setup-micromamba@v1
+      with:
+        init-shell: >-
+          bash
     - name: mkdir and chown
       run: |
         sudo mkdir -p ${{ matrix.prefix }}
         sudo chown -R $USER ${{ matrix.prefix }}
     - name: conda create
-      run: micromamba env create --prefix ${{ matrix.prefix }}/so-conda-${{ env.TODAYS_DATE }} --file examples/so.yml
+      run: mamba env create --prefix ${{ matrix.prefix }}/so-conda-${{ env.TODAYS_DATE }} --file examples/so.yml
     - name: debug
       run: ls -R ${{ matrix.prefix }}
     - name: create tarball
