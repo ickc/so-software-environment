@@ -52,6 +52,6 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: /${{ matrix.BASE_PREFIX }}/{{ env.FILENAME }}.tar.gz
+        files: /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.gz
         tag_name: ${{ env.YYYYMMDD }}
         name: ${{ env.YYYYMMDD }}
