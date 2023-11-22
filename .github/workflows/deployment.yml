@@ -27,7 +27,7 @@ jobs:
       run: |
         YYYYMMDD="$(date +'%Y%m%d')"
         echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
-        FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g'))"
+        FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')"
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
     - uses: actions/checkout@v4
     - name: mkdir and chown
