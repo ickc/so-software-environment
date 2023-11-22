@@ -40,8 +40,6 @@ jobs:
         channels: conda-forge
         activate-environment: /${{ matrix.BASE_PREFIX }}/${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
         environment-file: ${{ env.ENV_FILE }}
-    - name: cleanup
-      run: mamba clean --all
     - name: debug
       run: ls -R /${{ matrix.BASE_PREFIX }}
     - name: create tarball
