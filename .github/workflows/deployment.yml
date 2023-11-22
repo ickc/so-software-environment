@@ -20,18 +20,16 @@ jobs:
     - name: Set date
       run: echo "TODAYS_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
     - uses: actions/checkout@v4
-    - uses: conda-incubator/setup-miniconda@v2
-      with:
-        mamba-version: "*"
-        channels: conda-forge
-        auto-activate-base: true
-        activate-environment: ""
     - name: mkdir and chown
       run: |
         sudo mkdir -p ${{ matrix.prefix }}
         sudo chown -R $USER ${{ matrix.prefix }}
-    - name: conda create
-      run: mamba env create --prefix ${{ matrix.prefix }}/so-conda-${{ env.TODAYS_DATE }} --file examples/so.yml
+    - uses: conda-incubator/setup-miniconda@v2
+      with:
+        mamba-version: "*"
+        channels: conda-forge
+        activate-environment: ${{ matrix.prefix }}/so-conda-${{ env.TODAYS_DATE }}
+        environment-file: examples/so.yml
     - name: debug
       run: ls -R ${{ matrix.prefix }}
     - name: create tarball
