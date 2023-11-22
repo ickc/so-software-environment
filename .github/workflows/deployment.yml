@@ -31,7 +31,7 @@ jobs:
         environment-file: examples/so.yml
     - name: install mamba
       run: |
-      micromamba install -y mamba conda
+        micromamba install -y mamba conda
     - name: debug
       run: ls -R ${{ matrix.prefix }}
     - name: create tarball
