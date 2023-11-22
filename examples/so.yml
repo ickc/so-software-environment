@@ -10,6 +10,7 @@ dependencies:
   - cfitsio
   - cmake
   - compilers
+  - conda
   - configobj
   - coveralls
   - cython
@@ -27,6 +28,7 @@ dependencies:
   - libsharp=*=mpi*
   - libtool
   - make
+  - mamba
   - matplotlib
   - mpi4py
   - mpich-mpicc
