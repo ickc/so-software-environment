@@ -10,3 +10,5 @@ URL="https://github.com/ickc/so-software-environment/releases/download/$YYYYMMDD
 cd /tmp || exit 1
 wget "$URL"
 tar -xzf "$FILENAME.tar.gz" -C "/$BASE_PREFIX"
+PREFIX="/$BASE_PREFIX/$ENV_PREFIX-$YYYYMMDD"
+echo "Usage: . $PREFIX/bin/activate $PREFIX"
