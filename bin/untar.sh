@@ -12,4 +12,4 @@ cd /tmp || exit 1
 wget "$URL"
 mkdir -p "$PREFIX"
 tar -xzf "$FILENAME.tar.gz" -C "$PREFIX"
-echo "Usage: . $PREFIX/bin/activate $PREFIX"
+echo "Usage: source $PREFIX/bin/activate $PREFIX"
