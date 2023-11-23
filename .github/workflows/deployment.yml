@@ -41,16 +41,12 @@ jobs:
         channels: conda-forge
         activate-environment: /${{ matrix.BASE_PREFIX }}/${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
         environment-file: ${{ env.ENV_FILE }}
-    - name: debug
-      run: ls -R /${{ matrix.BASE_PREFIX }}
     - name: create tarball
       run: |
         cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
         tar -cf ../${{ env.FILENAME }}.tar .
         cd ..
         gzip ${{ env.FILENAME }}.tar
-    - name: debug
-      run: ls /${{ matrix.BASE_PREFIX }}
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
