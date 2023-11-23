@@ -25,7 +25,8 @@ jobs:
     steps:
     - name: Set date and output filename
       run: |
-        YYYYMMDD="$(date +'%Y%m%d')"
+        # use UTC time to match GitHub Actions
+        YYYYMMDD="$(TZ=UTC date +'%Y%m%d')"
         echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
         FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')_${{ env.ENV_PREFIX }}-$YYYYMMDD"
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
