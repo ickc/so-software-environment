@@ -6,7 +6,10 @@ on:
   schedule:
     - cron: '0 0 * * *' # Runs at 00:00 UTC every day
 env:
-  # this is the prefix for the conda environment, e.g. so-conda-YYYYMMDD
+  #* this is the prefix for the conda environment, e.g. so-conda-YYYYMMDD
+  #* convention: no underscores, and
+  #* it should leads to unqiue filenames in the end,
+  #* which means this should be unique between different kinds of builds
   ENV_PREFIX: so-conda
   ENV_FILE: examples/so.yml
 jobs:
@@ -18,36 +21,36 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix:
-        # this is the base prefix of the conda environment, the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-$YYYYMMDD
+        #* this is the base prefix of the conda environment,
+        #* the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-$YYYYMMDD
+        #* convention: no underscores, and
+        #* it should leads to unqiue filenames in the end,
+        #* which means this should be unique between different kinds of builds
         BASE_PREFIX:
           - cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda
           - tmp
     steps:
-    - name: Set date and output filename
+    - name: Set YYYYMMDD & FILENAME; mkdir & chown
       run: |
         # use UTC time to match GitHub Actions
         YYYYMMDD="$(TZ=UTC date +'%Y%m%d')"
         echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
         FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')_${{ env.ENV_PREFIX }}-$YYYYMMDD"
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
-    - uses: actions/checkout@v4
-    - name: mkdir and chown
-      run: |
         sudo mkdir -p /${{ matrix.BASE_PREFIX }}
         sudo chown -R $USER /${{ matrix.BASE_PREFIX }}
+    - uses: actions/checkout@v4
     - uses: conda-incubator/setup-miniconda@v2
       with:
         mamba-version: "*"
         channels: conda-forge
         activate-environment: /${{ matrix.BASE_PREFIX }}/${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
         environment-file: ${{ env.ENV_FILE }}
-    - name: create tarball
+    - name: Create tarball
       run: |
         cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_PREFIX }}-${{ env.YYYYMMDD }}
-        tar -cf ../${{ env.FILENAME }}.tar .
-        cd ..
-        gzip ${{ env.FILENAME }}.tar
-    - name: Release
+        tar -czf ../${{ env.FILENAME }}.tar.gz .
+    - name: Deploy to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
         files: /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.gz
