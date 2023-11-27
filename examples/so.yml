@@ -55,7 +55,6 @@ dependencies:
   - pytest
   - pytest-cov
   - python-dateutil
-  - python=3.10
   - pytz
   - pyyaml
   - quaternionarray
