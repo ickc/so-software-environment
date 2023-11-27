@@ -20,6 +20,7 @@ jobs:
       run:
         shell: bash -l {0}
     strategy:
+      fail-fast: false
       matrix:
         #* this is the base prefix of the conda environment,
         #* the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-$YYYYMMDD
