@@ -30,6 +30,7 @@ dependencies:
   - make
   - mamba
   - matplotlib
+  - micromamba
   - mpi4py
   - mpich-mpicc
   - mpich-mpicxx
