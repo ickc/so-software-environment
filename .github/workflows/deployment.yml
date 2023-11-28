@@ -56,6 +56,8 @@ jobs:
         channels: conda-forge
         activate-environment: /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
         environment-file: ${{ env.ENV_FILE }}
+    - name: install pxz
+      run: sudo apt install pxz
     - name: Create tarball
       run: |
         cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
