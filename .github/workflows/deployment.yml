@@ -59,10 +59,13 @@ jobs:
     - name: Create tarball
       run: |
         cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
+        tar --create --use-compress-program="pxz -9" --file ../${{ env.FILENAME }}.tar.xz .
         tar --create --use-compress-program="zstd -19 -T0" --file ../${{ env.FILENAME }}.tar.zst .
     - name: Deploy to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
-        files: /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.zst
+        files: |
+          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.xz
+          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.zst
         tag_name: ${{ env.YYYYMMDD }}
         name: ${{ env.YYYYMMDD }}
