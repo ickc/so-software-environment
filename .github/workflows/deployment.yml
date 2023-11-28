@@ -56,18 +56,24 @@ jobs:
         channels: conda-forge
         activate-environment: /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
         environment-file: ${{ env.ENV_FILE }}
-    - name: Create tarball
+    - name: Create tarball using zstd
+      run: |
+        cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
+        tar --create --use-compress-program="zstd -19 -T0" --file ../${{ env.FILENAME }}.tar.zst .
+        - name: Create tarball using gzip
+      run: |
+        cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
+        tar --create --use-compress-program="gzip -9" --file ../${{ env.FILENAME }}.tar.gz .
+        - name: Create tarball using xz
       run: |
         cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
         tar --create --use-compress-program="xz -9 -T0" --file ../${{ env.FILENAME }}.tar.xz .
-        tar --create --use-compress-program="gzip -9" --file ../${{ env.FILENAME }}.tar.gz .
-        tar --create --use-compress-program="zstd -19 -T0" --file ../${{ env.FILENAME }}.tar.zst .
     - name: Deploy to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.xz
-          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.gz
           /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.zst
+          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.gz
+          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.xz
         tag_name: ${{ env.YYYYMMDD }}
         name: ${{ env.YYYYMMDD }}
