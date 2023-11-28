@@ -7,11 +7,11 @@ PYTHON_VERSION="${PYTHON_VERSION:-310}"
 
 ENV_NAME="$ENV_PREFIX-py$PYTHON_VERSION-$YYYYMMDD"
 FILENAME="$(echo "$BASE_PREFIX" | sed 's/\//_/g')_$ENV_NAME"
-URL="https://github.com/ickc/so-software-environment/releases/download/$YYYYMMDD/$FILENAME.tar.gz"
+URL="https://github.com/ickc/so-software-environment/releases/download/$YYYYMMDD/$FILENAME.tar.zst"
 PREFIX="/$BASE_PREFIX/$ENV_NAME"
 
 cd /tmp || exit 1
 wget "$URL"
 mkdir -p "$PREFIX"
-tar -xzf "$FILENAME.tar.gz" -C "$PREFIX"
+tar --extract --zstd --file "$FILENAME.tar.zst" --directory="$PREFIX"
 echo "Usage: source $PREFIX/bin/activate $PREFIX"
