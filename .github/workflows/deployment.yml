@@ -49,7 +49,7 @@ jobs:
         sudo mkdir -p /${{ matrix.BASE_PREFIX }}
         sudo chown -R $USER /${{ matrix.BASE_PREFIX }}
     - uses: actions/checkout@v4
-    - uses: conda-incubator/setup-miniconda@v2
+    - uses: conda-incubator/setup-miniconda@v3
       with:
         python-version: ${{ matrix.python-version }}
         mamba-version: "*"
