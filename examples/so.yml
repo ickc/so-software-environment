@@ -1,4 +1,4 @@
-name: so-310
+name: so-conda
 channels:
   - conda-forge
   - nodefaults
