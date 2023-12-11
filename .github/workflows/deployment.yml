@@ -6,7 +6,7 @@ on:
   schedule:
     - cron: '0 0 * * *' # Runs at 00:00 UTC every day
 env:
-  #* this is the prefix for the conda environment, e.g. so-conda-YYYYMMDD
+  #* this is the prefix for the conda environment, e.g. so-conda-py3XY-YYYYMMDD
   #* convention: no underscores, and
   #* it should leads to unqiue filenames in the end,
   #* which means this should be unique between different kinds of builds
@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         #* this is the base prefix of the conda environment,
-        #* the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-$YYYYMMDD
+        #* the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-py3$XY-$YYYYMMDD
         #* convention: no underscores, and
         #* it should leads to unqiue filenames in the end,
         #* which means this should be unique between different kinds of builds
