@@ -1,4 +1,4 @@
-name: Continuous Deployment
+name: CD—so-conda
 on:
   push:
     branches:

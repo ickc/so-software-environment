@@ -1,4 +1,4 @@
-name: Continuous Deployment
+name: cd—so-pmpm
 on:
   push:
     branches:
