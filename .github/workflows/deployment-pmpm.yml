@@ -47,9 +47,9 @@ jobs:
         # use UTC time to match GitHub Actions
         YYYYMMDD="$(TZ=UTC date +'%Y%m%d')"
         echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
-        ENV_FILE=linux-$MKL-$MPI.yml
+        ENV_FILE=linux-${{ matrix.MKL }}-${{ matrix.MPI }}.yml
         echo "ENV_FILE=$ENV_FILE" >> $GITHUB_ENV
-        ENV_NAME="${{ env.ENV_PREFIX }}-py$(echo ${{ matrix.python-version }} | sed 's/\.//')-$MKL-$MPI-$YYYYMMDD"
+        ENV_NAME="${{ env.ENV_PREFIX }}-py$(echo ${{ matrix.python-version }} | sed 's/\.//')-${{ matrix.MKL }}-${{ matrix.MPI }}-$YYYYMMDD"
         echo "ENV_NAME=$ENV_NAME" >> $GITHUB_ENV
         FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')_$ENV_NAME"
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
