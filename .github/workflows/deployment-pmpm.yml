@@ -1,0 +1,93 @@
+name: Continuous Deployment
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *' # Runs at 00:00 UTC every day
+env:
+  #* this is the prefix for the conda environment, e.g. so-pmpm-py3XY-MKL-MPI-YYYYMMDD
+  #* convention: no underscores, and
+  #* it should leads to unqiue filenames in the end,
+  #* which means this should be unique between different kinds of builds
+  ENV_PREFIX: so-pmpm
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # required by conda
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      fail-fast: true
+      matrix:
+        #* this is the base prefix of the conda environment,
+        #* the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-py3$XY-$MKL-$MPI-$YYYYMMDD
+        #* convention: no underscores, and
+        #* it should leads to unqiue filenames in the end,
+        #* which means this should be unique between different kinds of builds
+        MKL:
+          - mkl
+          - nomkl
+        MPI:
+          - mpich
+          - openmpi
+        BASE_PREFIX:
+          - cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda
+          - tmp
+        python-version:
+          - '3.8'
+          - '3.9'
+          - '3.10'
+          # - '3.11'
+          # - '3.12'
+    steps:
+    - name: Set YYYYMMDD & FILENAME; mkdir & chown
+      run: |
+        # use UTC time to match GitHub Actions
+        YYYYMMDD="$(TZ=UTC date +'%Y%m%d')"
+        echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
+        ENV_FILE=linux-$MKL-$MPI.yml
+        echo "ENV_FILE=$ENV_FILE" >> $GITHUB_ENV
+        ENV_NAME="${{ env.ENV_PREFIX }}-py$(echo ${{ matrix.python-version }} | sed 's/\.//')-$MKL-$MPI-$YYYYMMDD"
+        echo "ENV_NAME=$ENV_NAME" >> $GITHUB_ENV
+        FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')_$ENV_NAME"
+        echo "FILENAME=$FILENAME" >> $GITHUB_ENV
+        sudo mkdir -p /${{ matrix.BASE_PREFIX }}
+        sudo chown -R $USER /${{ matrix.BASE_PREFIX }}
+    - uses: actions/checkout@v4
+    - name: Download environment file
+      run: |
+        wget https://github.com/ickc/python-pmpm/raw/master/examples/$ENV_FILE
+        wget https://github.com/ickc/python-pmpm/raw/master/environment.yml -O pmpm-env.yml
+    - uses: conda-incubator/setup-miniconda@v3
+      with:
+        python-version: 3.12
+        mamba-version: "*"
+        channels: conda-forge
+        environment-file: pmpm-env.yml
+    - name: install pmpm
+      run: pip install python_pmpm
+    - name: Create conda environment
+      run: pmpm conda_install /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }} --file $ENV_FILE
+    - name: Create tarball using zstd
+      run: |
+        cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
+        tar --create --use-compress-program="zstd -19 -T0" --file ../${{ env.FILENAME }}.tar.zst .
+    - name: Create tarball using gzip
+      run: |
+        cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
+        tar --create --use-compress-program="gzip -9" --file ../${{ env.FILENAME }}.tar.gz .
+    - name: Create tarball using xz
+      run: |
+        cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
+        tar --create --use-compress-program="xz -9 -T0" --file ../${{ env.FILENAME }}.tar.xz .
+    - name: Deploy to GitHub Releases
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.zst
+          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.gz
+          /${{ matrix.BASE_PREFIX }}/${{ env.FILENAME }}.tar.xz
+        tag_name: ${{ env.YYYYMMDD }}
+        name: ${{ env.YYYYMMDD }}
