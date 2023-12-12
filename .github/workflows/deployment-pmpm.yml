@@ -6,7 +6,7 @@ on:
   schedule:
     - cron: '0 0 * * *' # Runs at 00:00 UTC every day
 env:
-  #* this is the prefix for the conda environment, e.g. so-pmpm-py3XY-MKL-MPI-YYYYMMDD
+  #* this is the prefix for the conda environment, e.g. so-pmpm-py3XY-MKL-ARCH-MPI-YYYYMMDD
   #* convention: no underscores, and
   #* it should leads to unqiue filenames in the end,
   #* which means this should be unique between different kinds of builds
@@ -22,16 +22,10 @@ jobs:
       fail-fast: true
       matrix:
         #* this is the base prefix of the conda environment,
-        #* the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-py3$XY-$MKL-$MPI-$YYYYMMDD
+        #* the final conda prefix is /$BASE_PREFIX/$ENV_PREFIX-py3$XY-$MKL-$ARCH-$MPI-$YYYYMMDD
         #* convention: no underscores, and
         #* it should leads to unqiue filenames in the end,
         #* which means this should be unique between different kinds of builds
-        MKL:
-          - mkl
-          - nomkl
-        MPI:
-          - mpich
-          - openmpi
         BASE_PREFIX:
           - cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/pmpm
           - tmp
@@ -41,6 +35,15 @@ jobs:
           - '3.10'
           # - '3.11'
           # - '3.12'
+        MKL:
+          - mkl
+          - nomkl
+        ARCH:
+          - x86-64-v3
+          - x86-64-v4
+        MPI:
+          - mpich
+          - openmpi
     steps:
     - name: Set YYYYMMDD & FILENAME; mkdir & chown
       run: |
@@ -49,7 +52,7 @@ jobs:
         echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
         ENV_FILE=linux-${{ matrix.MKL }}-${{ matrix.MPI }}.yml
         echo "ENV_FILE=$ENV_FILE" >> $GITHUB_ENV
-        ENV_NAME="${{ env.ENV_PREFIX }}-py$(echo ${{ matrix.python-version }} | sed 's/\.//')-${{ matrix.MKL }}-${{ matrix.MPI }}-$YYYYMMDD"
+        ENV_NAME="${{ env.ENV_PREFIX }}-py$(echo ${{ matrix.python-version }} | sed 's/\.//')-${{ matrix.MKL }}-${{ matrix.ARCH }}-${{ matrix.MPI }}-$YYYYMMDD"
         echo "ENV_NAME=$ENV_NAME" >> $GITHUB_ENV
         FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')_$ENV_NAME"
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
@@ -69,7 +72,7 @@ jobs:
     - name: install pmpm
       run: pip install python_pmpm
     - name: Create conda environment
-      run: pmpm conda_install /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }} --file $ENV_FILE
+      run: pmpm conda_install /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }} --file $ENV_FILE --arch -${{ matrix.ARCH }}
     - name: Create tarball using zstd
       run: |
         cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
