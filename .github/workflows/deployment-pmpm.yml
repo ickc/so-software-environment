@@ -33,7 +33,7 @@ jobs:
           - mpich
           - openmpi
         BASE_PREFIX:
-          - cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/conda
+          - cvmfs/northgrid.gridpp.ac.uk/simonsobservatory/pmpm
           - tmp
         python-version:
           # - '3.8'
