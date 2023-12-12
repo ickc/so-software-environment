@@ -45,17 +45,22 @@ jobs:
           - mpich
           - openmpi
     steps:
-    - name: Set YYYYMMDD & FILENAME; mkdir & chown
+    - name: Set env var; mkdir & chown
       run: |
         # use UTC time to match GitHub Actions
         YYYYMMDD="$(TZ=UTC date +'%Y%m%d')"
         echo "YYYYMMDD=$YYYYMMDD" >> $GITHUB_ENV
         ENV_FILE=linux-${{ matrix.MKL }}-${{ matrix.MPI }}.yml
         echo "ENV_FILE=$ENV_FILE" >> $GITHUB_ENV
-        ENV_NAME="${{ env.ENV_PREFIX }}-py$(echo ${{ matrix.python-version }} | sed 's/\.//')-${{ matrix.MKL }}-${{ matrix.ARCH }}-${{ matrix.MPI }}-$YYYYMMDD"
+        ENV_NAME="$ENV_PREFIX-py$(echo ${{ matrix.python-version }} | sed 's/\.//')-${{ matrix.MKL }}-${{ matrix.ARCH }}-${{ matrix.MPI }}-$YYYYMMDD"
         echo "ENV_NAME=$ENV_NAME" >> $GITHUB_ENV
         FILENAME="$(echo ${{ matrix.BASE_PREFIX }} | sed 's/\//_/g')_$ENV_NAME"
         echo "FILENAME=$FILENAME" >> $GITHUB_ENV
+        # CI instances may not have AVX-512 so we skip testing there.
+        if [[ ${{ matrix.ARCH }} == x86-64-v4 ]]; then
+          EXTRA_ARGS='--skip-test'
+        fi
+        echo "EXTRA_ARGS=$EXTRA_ARGS" >> $GITHUB_ENV
         sudo mkdir -p /${{ matrix.BASE_PREFIX }}
         sudo chown -R $USER /${{ matrix.BASE_PREFIX }}
     - uses: actions/checkout@v4
@@ -72,15 +77,15 @@ jobs:
     - name: install pmpm
       run: pip install python_pmpm
     - name: Create conda environment
-      run: pmpm conda_install /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }} --file $ENV_FILE --arch ${{ matrix.ARCH }}
+      run: pmpm conda_install /${{ matrix.BASE_PREFIX }}/$ENV_NAME --file $ENV_FILE --arch ${{ matrix.ARCH }} $EXTRA_ARGS
     - name: Create tarball using zstd
       run: |
-        cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
-        tar --create --use-compress-program="zstd -19 -T0" --file ../${{ env.FILENAME }}.tar.zst .
+        cd /${{ matrix.BASE_PREFIX }}/$ENV_NAME
+        tar --create --use-compress-program="zstd -19 -T0" --file ../$FILENAME.tar.zst .
     - name: Create tarball using gzip
       run: |
-        cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
-        tar --create --use-compress-program="gzip -9" --file ../${{ env.FILENAME }}.tar.gz .
+        cd /${{ matrix.BASE_PREFIX }}/$ENV_NAME
+        tar --create --use-compress-program="gzip -9" --file ../$FILENAME.tar.gz .
     - name: Deploy to GitHub Releases
       uses: softprops/action-gh-release@v1
       with:
