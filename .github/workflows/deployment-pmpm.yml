@@ -72,7 +72,7 @@ jobs:
     - name: install pmpm
       run: pip install python_pmpm
     - name: Create conda environment
-      run: pmpm conda_install /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }} --file $ENV_FILE --arch -${{ matrix.ARCH }}
+      run: pmpm conda_install /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }} --file $ENV_FILE --arch ${{ matrix.ARCH }}
     - name: Create tarball using zstd
       run: |
         cd /${{ matrix.BASE_PREFIX }}/${{ env.ENV_NAME }}
