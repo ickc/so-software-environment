@@ -1,4 +1,4 @@
-name: cd—so-pmpm
+name: CD—so-pmpm
 on:
   push:
     branches:
