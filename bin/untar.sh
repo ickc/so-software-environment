@@ -31,16 +31,22 @@ case "$ENV_PREFIX" in
         ;;
     *)
         echo "Unknown environment prefix: $ENV_PREFIX"
-        exit 1
+        exit 2
         ;;
 esac
 URL="https://github.com/ickc/so-software-environment/releases/download/$YYYYMMDD/$FILENAME.tar.$EXTENSION"
 PREFIX="/$BASE_PREFIX/$ENV_NAME"
 
-cd /tmp || exit 1
+if [[ -d "$PREFIX" ]]; then
+    echo "Directory already exists: $PREFIX"
+    exit 3
+fi
+
+cd /tmp || exit 4
 wget "$URL"
-mkdir -p "$PREFIX"
+mkdir "$PREFIX.tmp" || exit 5
 # shellcheck disable=SC2086
-tar --extract --$PROGRAM --file "$FILENAME.tar.$EXTENSION" --directory="$PREFIX"
+tar --extract --$PROGRAM --file "$FILENAME.tar.$EXTENSION" --directory="$PREFIX.tmp"
 rm -f /tmp/"$FILENAME.tar.$EXTENSION"
+mv "$PREFIX.tmp" "$PREFIX"
 echo "Usage: source $PREFIX/bin/activate $PREFIX"
