@@ -42,4 +42,5 @@ wget "$URL"
 mkdir -p "$PREFIX"
 # shellcheck disable=SC2086
 tar --extract --$PROGRAM --file "$FILENAME.tar.$EXTENSION" --directory="$PREFIX"
+rm -f /tmp/"$FILENAME.tar.$EXTENSION"
 echo "Usage: source $PREFIX/bin/activate $PREFIX"
