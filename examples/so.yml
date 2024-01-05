@@ -3,22 +3,27 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
+  - archspec
   - astropy
   - autobahn
   - automake
   - bandit
+  - bump-my-version
   - cfitsio
   - cmake
   - compilers
   - conda
   - configobj
+  - coverage
   - coveralls
   - cython
+  - defopt
   - deprecation
   - ephem
   - fftw=*=mpi*
   - flake8
   - flatbuffers
+  - furo
   - h5py=*=mpi*
   - healpy
   - influxdb
@@ -27,6 +32,7 @@ dependencies:
   - libaatm
   - libsharp=*=mpi*
   - libtool
+  - linkify-it-py
   - make
   - mamba
   - matplotlib
@@ -36,13 +42,17 @@ dependencies:
   - mpich-mpicxx
   - mpich-mpifort
   - mypy
+  - myst-parser
   - namaster
   - nbformat
   - numba
   - numpy
   - pillow
   - plotly
+  - poetry
   - pshmem
+  - psutil
+  - py-cpuinfo
   - py-ubjson
   - pyaml
   - pydocstyle
@@ -59,6 +69,7 @@ dependencies:
   - pytz
   - pyyaml
   - quaternionarray
+  - ruamel.yaml
   - scikit-image
   - scipy
   - setproctitle
@@ -66,6 +77,8 @@ dependencies:
   - skyfield
   - sphinx
   - sphinx_rtd_theme
+  - sphinx-autobuild
+  - sphinxcontrib-apidoc
   - sqlalchemy
   - suitesparse
   - toml
@@ -84,6 +97,7 @@ dependencies:
       - so3g
       - socs
       - souk
+      - sphinx-last-updated-by-git
       # TODO: change this version manually as toast3 is currently pre-released
       #* see https://pypi.org/project/toast/#history to find newer versions
       - toast==3.0.0a20
