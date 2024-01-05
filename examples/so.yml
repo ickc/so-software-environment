@@ -83,6 +83,7 @@ dependencies:
       - posix_ipc
       - so3g
       - socs
+      - souk
       # TODO: change this version manually as toast3 is currently pre-released
       #* see https://pypi.org/project/toast/#history to find newer versions
       - toast==3.0.0a20
