@@ -43,7 +43,7 @@ if [[ -d "$PREFIX" ]]; then
 fi
 
 cd /tmp || exit 4
-wget "$URL"
+wget -q "$URL"
 mkdir "$PREFIX.tmp" || exit 5
 # shellcheck disable=SC2086
 tar --extract --$PROGRAM --file "$FILENAME.tar.$EXTENSION" --directory="$PREFIX.tmp"
