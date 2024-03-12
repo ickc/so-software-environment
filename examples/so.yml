@@ -20,12 +20,15 @@ dependencies:
   - cython
   - defopt
   - deprecation
+  - dill
   - ephem
   - fftw=*=mpi*
   - fire
   - flake8
   - flatbuffers
   - furo
+  - fuzzywuzzy
+  - getdist
   - h5py=*=mpi*
   - healpy
   - influxdb
@@ -49,14 +52,18 @@ dependencies:
   - nbformat
   - numba
   - numpy
+  - packaging
+  - pandas
   - pillow
   - plotly
   - poetry
+  - portalocker
   - pshmem
   - psutil
   - py-cpuinfo
   - py-ubjson
   - pyaml
+  - pybobyqa
   - pydocstyle
   - pyfftw
   - pylint
@@ -71,6 +78,7 @@ dependencies:
   - pytz
   - pyyaml
   - quaternionarray
+  - requests
   - ruamel.yaml
   - sacc
   - scikit-image
@@ -79,8 +87,8 @@ dependencies:
   - setuptools
   - skyfield
   - sphinx
-  - sphinx_rtd_theme
   - sphinx-autobuild
+  - sphinx_rtd_theme
   - sphinxcontrib-apidoc
   - sqlalchemy
   - suitesparse
@@ -92,6 +100,7 @@ dependencies:
   - wurlitzer
   - pip:
       - cbor2
+      - cobaya
       # TODO: choose your own version here, can be a branch like master, or a version like v0.4.0
       - https://github.com/simonsobs/SOOPERCOOL/archive/master.tar.gz
       - https://github.com/simonsobs/sotodlib/archive/master.tar.gz
